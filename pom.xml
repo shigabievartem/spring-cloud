@@ -74,6 +74,7 @@
         <module>ClientService</module>
         <module>Eureka</module>
         <module>ProcessingService</module>
+        <module>Zuul</module>
     </modules>
 
 </project>
