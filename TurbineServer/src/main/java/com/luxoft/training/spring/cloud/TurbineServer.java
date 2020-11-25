@@ -2,12 +2,12 @@ package com.luxoft.training.spring.cloud;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
+import org.springframework.cloud.netflix.turbine.stream.EnableTurbineStream;
 
 @SpringBootApplication
-@EnableHystrixDashboard
-public class Dashboard {
+@EnableTurbineStream
+public class TurbineServer {
     public static void main(String[] args) {
-        SpringApplication.run(Dashboard.class, args);
+        SpringApplication.run(TurbineServer.class, args);
     }
 }
