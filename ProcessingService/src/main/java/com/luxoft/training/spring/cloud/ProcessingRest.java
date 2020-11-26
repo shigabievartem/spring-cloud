@@ -2,6 +2,7 @@ package com.luxoft.training.spring.cloud;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,7 @@ public class ProcessingRest {
     private CardServiceClient cardServiceClient;
 
     @RequestMapping("/issue/{accountId}")
+    @PreAuthorize("hasAuthority('PROCESSING')")
     public String issueNewCard(@PathVariable Integer accountId) {
         final String card = cardServiceClient.createCard();
         ProcessingEntity pe = new ProcessingEntity();
@@ -34,6 +36,7 @@ public class ProcessingRest {
     }
 
     @RequestMapping("/checkout/{card}")
+    @PreAuthorize("hasAuthority('PROCESSING')")
     public boolean checkout(@PathVariable String card, @RequestParam BigDecimal sum) {
         ProcessingEntity pe = repo.findByCard(card);
         if (pe == null) {
@@ -43,6 +46,7 @@ public class ProcessingRest {
     }
 
     @RequestMapping("/get")
+    @PreAuthorize("hasAuthority('ACCOUNT_PROCESS')")
     public Map<Integer, String> getByAccount(@RequestParam("account_id") List<Integer> accountIdList) {
         List<ProcessingEntity> list = repo.findByAccountIdIn(accountIdList);
         Map<Integer, String> map = new HashMap<Integer, String>();

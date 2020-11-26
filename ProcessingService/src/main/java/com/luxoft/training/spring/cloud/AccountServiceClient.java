@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 
-@FeignClient(value = "AccountService", fallback = AccountServiceFallback.class)
+@FeignClient(value = "AccountService",
+        fallback = AccountServiceFallback.class,
+        configuration = AccountServiceClientConfiguration.class)
 public interface AccountServiceClient {
     @RequestMapping("/checkout/{id}")
     boolean checkout(@PathVariable("id") Integer accountId, @RequestParam("sum") BigDecimal sum);
