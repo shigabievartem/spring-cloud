@@ -60,6 +60,28 @@ Authorization: Basic client secret
  client.global.set("processing_token", response.body.access_token);
  %}
 
+### Test cloud bus. Each node in bus refresh
+POST http://localhost:8805/actuator/bus-refresh
+Accept: application/json
+Authorization: Bearer {{processing_token}}
+
+### Test cloud bus. Single node refresh
+POST http://localhost:8805/actuator/refresh
+Accept: application/json
+Authorization: Bearer {{processing_token}}
+
+### Test cloud bus. Get param value
+GET http://localhost:8805/param
+Accept: application/json
+Authorization: Bearer {{processing_token}}
+
+### Test cloud bus. Change environment param.
+POST localhost:8804/actuator/bus-env
+Authorization: Bearer {{processing_token}}
+Content-Type: application/json
+
+{"name":"tparam", "value":"777"}
+
 ### Generate credit card
 GET http://localhost:8804/issue/{{accountId}}
 Accept: application/json
