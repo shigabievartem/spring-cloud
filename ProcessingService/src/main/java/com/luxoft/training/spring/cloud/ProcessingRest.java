@@ -2,6 +2,8 @@ package com.luxoft.training.spring.cloud;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RefreshScope
 @RestController
 public class ProcessingRest {
     @Autowired
@@ -56,6 +59,16 @@ public class ProcessingRest {
         return map;
     }
 
+    // Cloud bus test api
+    @Value("${tparam}")
+    String param;
+
+    @RequestMapping("param")
+    public String param() {
+        return param;
+    }
+
+    // Monitoring test api
     @HystrixCommand(fallbackMethod = "testFallback")
     @RequestMapping("/test")
     public String testHystrix(Boolean fail) {

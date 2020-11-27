@@ -33,7 +33,6 @@ Authorization: Basic client secret
  client.global.set("account_token", response.body.access_token);
  %}
 
-
 ### Create account for the client
 GET http://localhost:8802/create?client_id=7
 Authorization: Bearer {{account_token}}
@@ -41,7 +40,7 @@ Authorization: Bearer {{account_token}}
 ### Retrieve id of the account
 GET http://localhost:8802/get/7
 Accept: application/json
-Authorization: Bearer {{card_token}}
+Authorization: Bearer {{account_token}}
 
 > {%
   client.global.set("accountId", response.body[0].id);
@@ -51,6 +50,14 @@ Authorization: Bearer {{card_token}}
 GET http://localhost:8802/fund/{{accountId}}?sum=1000
 Authorization: Bearer {{account_token}}
 
+### Checkout sum
+GET http://localhost:8802/checkout/{{accountId}}?sum=1000
+Authorization: Bearer {{account_token}}
+
+### Get token for card service
+GET http://localhost:8888
+Authorization: Bearer {{card_token}}
+
 ### Get token for processing service
 
 POST http://localhost:8500/uaa/oauth/token?grant_type=password&username=processing&password=processing
@@ -59,6 +66,28 @@ Authorization: Basic client secret
 > {%
  client.global.set("processing_token", response.body.access_token);
  %}
+
+### Test cloud bus. Each node in bus refresh
+POST http://localhost:8805/actuator/bus-refresh
+Accept: application/json
+Authorization: Bearer {{processing_token}}
+
+### Test cloud bus. Single node refresh
+POST http://localhost:8805/actuator/refresh
+Accept: application/json
+Authorization: Bearer {{processing_token}}
+
+### Test cloud bus. Get param value
+GET http://localhost:8805/param
+Accept: application/json
+Authorization: Bearer {{processing_token}}
+
+### Test cloud bus. Change environment param.
+POST localhost:8804/actuator/bus-env
+Authorization: Bearer {{processing_token}}
+Content-Type: application/json
+
+{"name":"tparam", "value":"777"}
 
 ### Generate credit card
 GET http://localhost:8804/issue/{{accountId}}
