@@ -33,7 +33,6 @@ Authorization: Basic client secret
  client.global.set("account_token", response.body.access_token);
  %}
 
-
 ### Create account for the client
 GET http://localhost:8802/create?client_id=7
 Authorization: Bearer {{account_token}}
@@ -41,7 +40,7 @@ Authorization: Bearer {{account_token}}
 ### Retrieve id of the account
 GET http://localhost:8802/get/7
 Accept: application/json
-Authorization: Bearer {{card_token}}
+Authorization: Bearer {{account_token}}
 
 > {%
   client.global.set("accountId", response.body[0].id);
@@ -50,6 +49,14 @@ Authorization: Bearer {{card_token}}
 ### Put some money to the account
 GET http://localhost:8802/fund/{{accountId}}?sum=1000
 Authorization: Bearer {{account_token}}
+
+### Checkout sum
+GET http://localhost:8802/checkout/{{accountId}}?sum=1000
+Authorization: Bearer {{account_token}}
+
+### Get token for card service
+GET http://localhost:8888
+Authorization: Bearer {{card_token}}
 
 ### Get token for processing service
 
